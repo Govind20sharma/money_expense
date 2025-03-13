@@ -44,8 +44,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 
-const updateExpenses = asyncHandler(async (req, res) => {
-  const { marital_status, salary, rent, food, travel } = req.body;
+const Expenses = asyncHandler(async (req, res) => {
+  const { marital_status, salary, rent, food, travel, extras } = req.body;
 
   try {
     // Update user fields
@@ -55,11 +55,12 @@ const updateExpenses = asyncHandler(async (req, res) => {
     if (rent) user.rent = rent;
     if (food) user.food = food;
     if (travel) user.travel = travel;
+    if (extras) user.extras = extras;
 
     // Calculate financial metrics
-    const totalExpenses = user.rent + user.food + user.travel;
+    const totalExpenses = user.rent + user.food + user.travel+user.extras;
     const disposableIncome = user.salary - totalExpenses;
-
+    
     // Generate AI advice
     const financialAdvice = await generateFinancialAdvice({
       ...user.toObject(),
@@ -80,6 +81,7 @@ const updateExpenses = asyncHandler(async (req, res) => {
           rent: user.rent,
           food: user.food,
           travel: user.travel,
+          extras:user.extras,
           total: totalExpenses
         },
         disposableIncome,
@@ -92,4 +94,4 @@ const updateExpenses = asyncHandler(async (req, res) => {
     });
   }
 });
-module.exports = { register, login, logout, getUserProfile, updateExpenses };
+module.exports = { register, login, logout, getUserProfile, Expenses };

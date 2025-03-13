@@ -5,7 +5,7 @@ const {
   login,
   logout,
   getUserProfile,
-  updateExpenses,
+  Expenses,
 } = require("../controllers/userControllers");
 const { protect } = require("../middlewares/userAuthMiddleware");
 
@@ -15,6 +15,6 @@ router.post("/login", login); // ✅ No auth needed
 // Protected Routes (Require valid JWT token)
 router.post("/logout", protect, logout);
 router.get("/profile", protect, getUserProfile);
-router.put("/expenses", protect, updateExpenses);
+router.put("/expenses", protect, Expenses);
 
 module.exports = router;

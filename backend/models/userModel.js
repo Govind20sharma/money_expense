@@ -21,6 +21,7 @@ const userSchema = mongoose.Schema(
     rent: { type: Number, default: 0 },
     food: { type: Number, default: 0 },
     travel: { type: Number, default: 0 },
+    extras:{type:Number, default: 0 }
   },
   { timestamps: true }
 );

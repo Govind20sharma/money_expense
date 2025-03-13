@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 
 // Register User
-const registerUser = async ({ username, email, password, marital_status, salary, rent, food, travel }) => {
+const registerUser = async ({ username, email, password, marital_status, salary, rent, food, travel,extras }) => {
   try {
     const normalizedEmail = email.toLowerCase().trim();
     
@@ -19,17 +19,13 @@ const registerUser = async ({ username, email, password, marital_status, salary,
       rent,
       food,
       travel,
+      extras
     });
 
     return {
       _id: user._id,
       username: user.username,
       email: user.email,
-      marital_status: user.marital_status,
-      salary: user.salary,
-      rent: user.rent,
-      food: user.food,
-      travel: user.travel,
       token: user.generateToken(),
     };
   } catch (error) {
@@ -52,11 +48,6 @@ const loginUser = async (email, password) => {
       _id: user._id,
       username: user.username,
       email: user.email,
-      marital_status: user.marital_status,
-      salary: user.salary,
-      rent: user.rent,
-      food: user.food,
-      travel: user.travel,
       token: user.generateToken(),
     };
   } catch (error) {
