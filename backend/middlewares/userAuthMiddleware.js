@@ -1,30 +1,38 @@
 const jwt = require("jsonwebtoken");
+const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 
-const protect = async (req, res, next) => {
+const protect = asyncHandler(async (req, res, next) => {
   let token;
 
-  if (req.headers.authorization?.startsWith("Bearer")) {
-    token = req.headers.authorization.split(" ")[1];
-  }
+  // Check if the token is in the headers
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      // Extract the token from the header
+      token = req.headers.authorization.split(" ")[1];
 
-  if (!token) {
-    return res.status(401).json({ message: "No token provided" });
-  }
+      // Verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select("-password");
-    
-    if (!user) {
-      return res.status(401).json({ message: "User not found" });
+      // Attach the user to the request object
+      req.user = await User.findById(decoded.id).select("-password");
+
+      next(); // Proceed to the next middleware/route
+    } catch (error) {
+      console.error(error);
+      res.status(401);
+      throw new Error("Not authorized, token failed");
     }
-
-    req.user = user;
-    next();
-  } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
   }
-};
+
+  // If no token is found
+  if (!token) {
+    res.status(401);
+    throw new Error("Not authorized, no token");
+  }
+});
 
 module.exports = { protect };
