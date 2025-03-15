@@ -8,10 +8,10 @@ const { generateFinancialAdvice } = require("../services/aiServices");
 
 /// Register
 const register = asyncHandler(async (req, res) => {
-  const { username, email, password, marital_status, salary, rent, food, travel } = req.body;
+  const { username, email, password} = req.body;
 
   try {
-    const user = await registerUser({ username, email, password, marital_status, salary, rent, food, travel });
+    const user = await registerUser({ username, email, password });
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -48,8 +48,9 @@ const Expenses = asyncHandler(async (req, res) => {
   const { marital_status, salary, rent, food, travel, extras } = req.body;
 
   try {
+    const user = req.user; // Ensure req.user is populated by the auth middleware
+
     // Update user fields
-    const user = req.user;
     if (marital_status) user.marital_status = marital_status;
     if (salary) user.salary = salary;
     if (rent) user.rent = rent;
@@ -58,14 +59,14 @@ const Expenses = asyncHandler(async (req, res) => {
     if (extras) user.extras = extras;
 
     // Calculate financial metrics
-    const totalExpenses = user.rent + user.food + user.travel+user.extras;
+    const totalExpenses = user.rent + user.food + user.travel + user.extras;
     const disposableIncome = user.salary - totalExpenses;
-    
+
     // Generate AI advice
     const financialAdvice = await generateFinancialAdvice({
       ...user.toObject(),
       totalExpenses,
-      disposableIncome
+      disposableIncome,
     });
 
     await user.save();
@@ -81,16 +82,16 @@ const Expenses = asyncHandler(async (req, res) => {
           rent: user.rent,
           food: user.food,
           travel: user.travel,
-          extras:user.extras,
-          total: totalExpenses
+          extras: user.extras,
+          total: totalExpenses,
         },
         disposableIncome,
-        financialAdvice
-      }
+        financialAdvice,
+      },
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message || "Failed to update expenses"
+      message: error.message || "Failed to update expenses",
     });
   }
 });

@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 
 // Register User
-const registerUser = async ({ username, email, password, marital_status, salary, rent, food, travel,extras }) => {
+const registerUser = async ({ username, email, password }) => {
   try {
     const normalizedEmail = email.toLowerCase().trim();
     
@@ -13,13 +13,7 @@ const registerUser = async ({ username, email, password, marital_status, salary,
     const user = await User.create({
       username,
       email: normalizedEmail,
-      password,
-      marital_status,
-      salary,
-      rent,
-      food,
-      travel,
-      extras
+      password
     });
 
     return {
