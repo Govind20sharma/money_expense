@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import MarriedPage from "./pages/MarriedPage";
+import Output from "./pages/Output";
 // import BachelorPage from "./pages/BachelorPage";
 
 // Protected Route Component
@@ -42,6 +43,8 @@ const App = () => {
             </ProtectedRoute>
           }
         /> */}
+        <Route path="/output" element={<Output />} />
+
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
