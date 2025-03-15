@@ -32,6 +32,7 @@ async function generateFinancialAdvice(userData) {
         • Rent: ₹${userData.rent}
         • Food: ₹${userData.food}
         • Travel: ₹${userData.travel}
+        • Extras: ₹${userData.extras}
       - Total Expenses: ₹${userData.totalExpenses}
       - Disposable Income: ₹${userData.disposableIncome}
 
