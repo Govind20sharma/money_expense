@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import authService from "../services/authService"; // Import the service
 import { useNavigate } from "react-router-dom";
+import { useFinancialData } from "../context/FinancialDataContext"; // Import the context hook
 
 const ExpensesForm = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+  const { setFinancialData } = useFinancialData(); // Use the context to set financial data
 
   const [formData, setFormData] = useState({
     marital_status: "single",
@@ -15,7 +17,6 @@ const ExpensesForm = () => {
   });
 
   const handleInputChange = (e) => {
-
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -26,17 +27,22 @@ const ExpensesForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Call the submitExpenses function from the service
       const response = await authService.submitExpenses(formData);
-      navigate('/output')
-
-      alert("Expenses submitted successfully!");
+  
+      // Safely access financial advice using optional chaining
+      const financialAdvice = response?.user?.financialAdvice;
+  
+      if (financialAdvice) {
+        setFinancialData(financialAdvice); // Store financial advice in context
+        navigate("/output"); // Redirect to the output page
+        alert("Expenses submitted successfully!");
+      } else {
+        throw new Error("Financial advice not found in the response.");
+      }
     } catch (error) {
-      console.error("Error submitting expenses:", error);
       alert(error.message || "Failed to submit expenses. Please try again.");
     }
   };
-
   return (
     <div>
       <h2>Expenses Form</h2>
@@ -50,7 +56,6 @@ const ExpensesForm = () => {
           >
             <option value="single">Single</option>
             <option value="married">Married</option>
-            <option value="divorced">Divorced</option>
           </select>
         </label>
         <br />
