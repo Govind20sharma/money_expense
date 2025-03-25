@@ -42,7 +42,6 @@ const submitExpenses = async (formData) => {
     });
     return response.data; // Return the response data
   } catch (error) {
-    console.error("Error submitting expenses:", error);
     throw error; // Throw the error to handle it in the component
   }
 };
