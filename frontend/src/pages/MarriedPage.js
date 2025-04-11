@@ -33,12 +33,13 @@ const ExpensesForm = () => {
 
     try {
       const response = await authService.submitExpenses(formData);
+      console.log("response", response);
       const financialAdvice = response?.user?.financialAdvice;
+      console.log("financialAdvice", financialAdvice);
 
       if (financialAdvice) {
         setFinancialData(financialAdvice);
         navigate("/output");
-        alert("Expenses submitted successfully!");
       } else {
         throw new Error("Financial advice not found in the response.");
       }

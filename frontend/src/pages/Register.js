@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/authService";
-import '../styles/Register.module.css';
+import styles from '../styles/Register.module.css';
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -21,10 +21,10 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <div className="form-card">
+    <div className={styles['register-container']}>
+      <div className={styles['form-card']}>
         <h2>Register</h2>
-        {error && <p className="error-text">{error}</p>}
+        {error && <p className={styles['error-text']}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -32,7 +32,7 @@ const Register = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            className="form-input"
+            className={styles['form-input']}
           />
           <input
             type="email"
@@ -40,7 +40,7 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="form-input"
+            className={styles['form-input']}
           />
           <input
             type="password"
@@ -48,9 +48,9 @@ const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="form-input"
+            className={styles['form-input']}
           />
-          <button type="submit" className="submit-button">Register</button>
+          <button type="submit" className={styles['submit-button']}>Register</button>
         </form>
       </div>
     </div>
